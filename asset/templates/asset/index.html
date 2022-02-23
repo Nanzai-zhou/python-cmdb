@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title%}资产管理{% endblock %}
+{% block nav_active_asset %}active{% endblock %}
+{% block container %}
+<div class="jumpotron">
+    <table id="asset_table" class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>主机名</th>
+                <th>IP</th>
+                <th>操作系统</th>
+                <th>架构</th>
+                <th>内存</th>
+                <th>CPU</th>
+                <th>发现时间</th>
+                <th>心跳时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<div id="echart-test" style="width: 600px; height: 400px;"></div>
+{% endblock %}
+
+{% block dialogs %}
+<!-- 资产管理 Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">资产修改</h4>
+            </div>
+            <div class="modal-body">
+                <form action="#0" method="post" class="form-horizontal" id="form-edit-asset">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="asset_edit_id" class="col-md-2 control-label">ID</label>
+                        <div class="col-md-6">
+                            <input type="text" id="asset_edit_id" class="form-control" name="id" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="asset_edit_ip" class="col-md-2 control-label">IP</label>
+                        <div class="col-md-6">
+                            <input type="text" id="asset_edit_ip" class="form-control" name="ip">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="asset_edit_hostname" class="col-md-2 control-label">主机名</label>
+                        <div class="col-md-6">
+                            <input type="text" id="asset_edit_hostname" class="form-control" name="hostname">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="asset_edit_os" class="col-md-2 control-label">操作系统</label>
+                        <div class="col-md-6">
+                            <input type="text" id="asset_edit_os" class="form-control" name="platform">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="asset_edit_arch" class="col-md-2 control-label">架构</label>
+                        <div class="col-md-6">
+                            <input type="text" id="asset_edit_arch" class="form-control" name="arch">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="asset_edit_mem" class="col-md-2 control-label">内存</label>
+                        <div class="col-md-6">
+                            <input type="number" id="asset_edit_mem" class="form-control" name="mem">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="asset_edit_cpu" class="col-md-2 control-label">CPU</label>
+                        <div class="col-md-6">
+                            <input type="number" id="asset_edit_cpu" class="form-control" name="cpu">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn-save-asset">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 监控 Modal -->
+<div class="modal fade" id="monitorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">性能监控</h4>
+            </div>
+            <div class="modal-body">
+                <div id="echart-asset-monitor" style="width: 600px;height:400px;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'echarts-5.3.0-dist/echarts.js' %}"></script>
+{% endblock %}
+
+{% block js %}
+var table = $('#asset_table').DataTable({
+"ajax": {
+    "url": "{% url 'asset:list_ajax' %}",
+    "dataSrc": "result"
+},
+"columns": [
+    { "data": "hostname" },
+    { "data": "ip" },
+    { "data": "platform" },
+    { "data": "arch" },
+    { "data": "mem" },
+    { "data": "cpu" },
+    { "data": "register_time"},
+    { "data": "heartbeat_time"},
+    { "data": function(row) {
+        return '<a href="javascript:void(0)" class="btn btn-danger btn-xs btn-delete-asset" data-id="'+ row['id'] + '">删除</a> '
+        + 
+        '<a href="javascript:void(0)" class="btn btn-success btn-xs btn-edit-asset" data-id="' + row['id'] +'">编辑</a> '
+        + 
+        '<a href="javascript:void(0)" class="btn btn-primary btn-xs btn-monitor-asset" data-id="' + row['id'] +'">监控</a>'
+    }}
+]}
+);
+$('#asset_table').on('click', '.btn-delete-asset', function() {
+    var id = $(this).attr('data-id')
+    swal({
+        "title": "确定要删除资产吗？",
+        "icon": "warning",
+        "buttons": {
+            "cancel": "取消",
+            "confirm": "确定"
+        },
+        "dangerMode": true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            console.log("删除资产")
+            $.get("{% url 'asset:delete_ajax' %}", {"id": id}, function (result) {
+                console.log(result)
+                if (result.code == 200) {
+                    table.ajax.reload(null, false);
+                } else {
+                    swal({
+                        "title": "资产删除失败",
+                        "icon": "error"
+                    });
+                }
+            });
+        }
+    })
+});
+$('#asset_table').on('click', '.btn-edit-asset', function() {
+    var id = $(this).attr('data-id')
+    $('#editModal').modal('show')
+    $.get('{% url "asset:get_ajax" %}', {"id": id}, function (result) {
+        if (result.code == 200) {
+            host = result.result
+            console.log(host)
+            $('#asset_edit_id').val(host.id)
+            $('#asset_edit_ip').val(host.ip)
+            $('#asset_edit_hostname').val(host.hostname)
+            $('#asset_edit_os').val(host.platform)
+            $('#asset_edit_arch').val(host.arch)
+            $('#asset_edit_mem').val(host.mem)
+            $('#asset_edit_cpu').val(host.cpu)
+        }
+    });
+    $('.btn-save-asset').on('click', function() {
+        var assetdata = $('#form-edit-asset').serializeArray()
+        $.post('{% url "asset:edit_ajax" %}', assetdata, function (result) {
+            console.log(result)
+            if (result["code"] == 400) {
+                swal({
+                    "title": result["result"],
+                    "icon": "warning",
+                }).then((value) => window.replace('{% url "user:login" %}'))
+            } else if (result["code"] == 403) {
+                    swal({
+                        "title": result["result"],
+                        "icon": "warning",
+                    })
+            } else {
+                swal({
+                    "title": "资产修改成功",
+                    "icon": "success",
+                }).then((value) => {
+                    table.ajax.reload(null, false)
+                    $('#editModal').modal('hide')
+                })
+            }
+        }, 
+        "json")
+    })
+});
+var th = null
+var resEchart = echarts.init(document.getElementById('echart-asset-monitor'))
+$('#asset_table').on('click', '.btn-monitor-asset', function(){
+    function echart_setoption(id) {
+        console.log('开始获取数据')
+        $.get('{% url "asset:get_resource_ajax" %}', {id: id}, function(result) {
+            if (result.code == 200) {
+                resource_list = result.result
+                var option = {
+                    title: {
+                        text: 'cpu与内存利用率'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    legend: {
+                        data: ['cpu', 'mem']
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: resource_list[0]
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            name: 'cpu',
+                            type: 'line',
+                            data: resource_list[1]
+                        },
+                        {
+                            name: 'mem',
+                            type: 'line',
+                            data: resource_list[2]
+                        }
+                    ]
+                };
+                resEchart.setOption(option);
+            }
+        });
+    }
+    var id = $(this).attr('data-id')
+    $('#monitorModal').modal('show')
+    echart_setoption(id)
+    console.log(th)
+    if (th === null) {
+        th = setInterval(function () {
+            echart_setoption(id)
+        }, 5 * 1000)
+    }
+});
+$('#monitorModal').on('hidden.bs.modal', function() {
+    if (th !== null) {
+        clearInterval(th);
+        th = null;
+    }
+})
+{% endblock %}

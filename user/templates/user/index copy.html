@@ -1,0 +1,328 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>用户列表</title>
+    <link href="{% static 'bootstrap-3.4.1-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'user/css/navbar-fixed-top.css' %}">
+    <link rel="stylesheet" href="{% static 'DataTables-1.10.21/media/css/dataTables.bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'sweetalert-1.1.1/dist/sweetalert.css' %}">
+</head>
+
+<body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">CMDB系统</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="{% url 'user:index' %}">用户管理</a></li>
+                    <li><a href="#">About</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">{{ request.session.user.name }}</a></li>
+                    <li><a href="{% url 'user:signup' %}">创建用户</a></li>
+                    <li><a href="{% url 'user:logout' %}">退出登录</a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </nav>
+    </div> <!-- /container -->
+    <div class="container">
+        <div class="jumpotron">
+            <div>
+                <a class="btn btn-primary btn-create-user" href="javascript:void(0)">创建</a>
+            </div>
+            <br>
+            <table id="user_table" class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>AGE</th>
+                        <th>SEX</th>
+                        <th>TEL</th>
+                        <th>CREATE_TIME</th>
+                        <th>OPERATE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td name="id">{{ user.id }}</td>
+                        <td name="name">{{ user.name }}</td>
+                        <td name="age">{{ user.age }}</td>
+                        {% if user.sex == 0 %}
+                        <td name="sex">女</td>
+                        {% else %}
+                        <td name="sex">男</td>
+                        {% endif %}
+                        <td name="tel">{{ user.tel }}</td>
+                        <td name="create_time">{{ user.create_time }}</td>
+                        <td><a href="javascript:void(0)" class="btn btn-danger btn-xs btn-delete-user"
+                                data-id="{{ user.id }}">删除</a>
+                            <a href="javascript:void(0)" class="btn btn-success btn-xs btn-edit-user"
+                                data-id="{{ user.id }}">编辑</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">创建用户</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="#0" method="post" class="form-horizontal form-create-user">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="user_name" class="col-md-2 control-label">用户名</label>
+                            <div class="col-md-6">
+                                <input type="text" id="user_name" class="form-control" name="name" placeholder="请输入用户名">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="user_password" class="col-md-2 control-label">密码</label>
+                            <div class="col-md-6">
+                                <input type="password" id="user_password" class="form-control" name="password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="user_age" class="col-md-2 control-label">年龄</label>
+                            <div class="col-md-6">
+                                <input type="number" id="user_age" class="form-control" name="age">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">性别</label>
+                            <div class="col-md-6">
+                                <label class="radio-inline">
+                                    <input type="radio" name="sex" value="1" checked> 男
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="sex" value="0"> 女
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="user_tel" class="col-md-2 control-label">电话</label>
+                            <div class="col-md-6">
+                                <input type="text" id="user_tel" class="form-control" name="tel">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-success  btn-save-user">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">用户修改</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="#0" method="post" class="form-horizontal" id="form-edit-user">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="user_edit_id" class="col-md-2 control-label">ID</label>
+                            <div class="col-md-6">
+                                <input type="text" id="user_edit_id" class="form-control" name="id" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="user_edit_name" class="col-md-2 control-label">用户名</label>
+                            <div class="col-md-6">
+                                <input type="text" id="user_edit_name" class="form-control" name="name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="user_edit_age" class="col-md-2 control-label">年龄</label>
+                            <div class="col-md-6">
+                                <input type="number" id="user_edit_age" class="form-control" name="age">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">性别</label>
+                            <div class="col-md-6">
+                                <label class="radio-inline">
+                                    <input type="radio" id="user_edit_sex_man" name="sex" value="1"> 男
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" id="user_edit_sex_women" name="sex" value="0"> 女
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="user_edit_tel" class="col-md-2 control-label">电话</label>
+                            <div class="col-md-6">
+                                <input type="text" id="user_edit_tel" class="form-control" name="tel">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary btn-save-user">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'bootstrap-3.4.1-dist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'DataTables-1.10.21/media/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'DataTables-1.10.21/media/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- <script src="{% static 'sweetalert-1.1.1/dist/sweetalert.min.js' %}"></script> -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#user_table').DataTable();
+        });
+    </script>
+    <script>
+        var dialog = $('.btn-create-user')
+        dialog.on('click', function () {
+            $('#createModal').modal({ 'show': true, 'backdrop': false, 'keyboard': false });
+            $('.btn-save-user').on('click', function () {
+                console.log('提交表单')
+                var userdata = $('.form-create-user').serializeArray()
+                console.log(userdata)
+                result = $.post("{% url 'user:create_ajax' %}", userdata, function (result) {
+                    if (result["code"] == 200) {
+                        //alert('用户创建成功')
+                        swal({
+                            "title": "用户创建成功",
+                            "icon": 'success',
+                            "closeModal": false
+                        }).then(
+                            function () {
+                                swal.close()
+                                $('#myModal').modal('hide')
+                                window.location.reload()
+                            })
+                    } else if (result["code"] == 400) {
+                        //alert('用户未登录')
+                        swal({
+                            "title": '用户未登录',
+                            "icon": 'error',
+                            "closeModal": false
+                        },
+                            function () {
+                                window.location.replace('{% url "user:login" %}')
+                            })
+                    } else if (result["code"] == 403) {
+                        //alert('用户创建失败：\n' + result["result"])
+                        swal('用户创建失败', result["result"], 'error')
+                    }
+                }, 'json')
+            });
+        });
+    </script>
+    <script>
+        var delete_button = $('#user_table').find('.btn-delete-user')
+        delete_button.on('click', function () {
+            var id = $(this).attr('data-id')
+            swal({
+                "title": "确定要删除用户吗？",
+                "text": "一旦删除，用户将无法恢复！",
+                "icon": "warning",
+                buttons: {
+                    cancel: "取消",
+                    confirm: "确定",
+                },
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.get('{% url "user:delete_ajax" %}', {id: id}, function (result) {
+                        if (result["code"] == 200) {
+                            swal({
+                                title: "用户删除成功",
+                                icon: "success",
+                            }).then(
+                                function () {
+                                    swal.close()
+                                    window.location.reload()
+                                }
+                            )
+                        } else {
+                            swal({
+                                title: "用户删除失败",
+                                icon: "error",
+                            })
+                        }
+                    },
+                    "json")
+                }});
+        });
+    </script>
+    <script>
+        var edit_button = $("#user_table").find('.btn-edit-user')
+        edit_button.on('click', function () {
+            $('#editModal').modal('show')
+            var parent = $(this).parent().parent()
+            var id = $(this).attr('data-id')
+            var name = parent.find('[name=name]').text()
+            console.log(name)
+            var age = parent.find('[name=age]').text()
+            var sex = parent.find('[name=sex]').text()
+            var tel = parent.find('[name=tel]').text()
+            $('#user_edit_id').val(id)
+            $('#user_edit_name').val(name)
+            $('#user_edit_age').val(age)
+            $('#user_edit_tel').val(tel)
+            if ( sex == "男") {
+                $("#user_edit_sex_man").attr('checked', true)
+            } else {
+                $("#user_edit_sex_women").attr('checked', true)
+            }
+            $('.btn-save-user').on("click", function() {
+                var userdata = $('#form-edit-user').serializeArray()
+                $.post('{% url "user:edit_ajax" %}', userdata, function (result) {
+                    if (result["code"] == 400) {
+                        swal({
+                            "title": "用户未登录",
+                            "icon": "warning",
+                        }).then((value) => window.replace('{% url "user:login" %}'))
+                    } else {
+                        swal({
+                            "title": "用户修改成功",
+                            "icon": "success",
+                        }).then((value) => window.location.reload())
+                    }
+                }, 
+                "json")
+            });
+        });
+    </script>
+</body>
+
+</html>

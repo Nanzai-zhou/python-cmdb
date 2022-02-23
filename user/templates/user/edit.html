@@ -1,0 +1,102 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>用户列表</title>
+    <link href="{% static 'bootstrap-3.4.1-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'user/css/navbar-fixed-top.css' %}">
+</head>
+
+<body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">CMDB系统</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="{% url 'user:index' %}">用户管理</a></li>
+                    <li><a href="#">About</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">{{ request.session.user.name }}</a></li>
+                    <li><a href="{% url 'user:signup' %}">创建用户</a></li>
+                    <li><a href="{% url 'user:logout' %}">退出登录</a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </nav>
+    </div> <!-- /container -->
+    <div class="container">
+        <div class="col-md-8 col-md-offset-2">
+            <form action="{% url 'user:change' %}" method="post" class="form-horizontal">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="user_id" class="col-md-2 control-label">ID</label>
+                    <div class="col-md-6">
+                        <input type="text" id="user_id" class="form-control" name="id" value="{{ user.id }}" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="user_name" class="col-md-2 control-label">用户名</label>
+                    <div class="col-md-6">
+                        <input type="text" id="user_name" class="form-control" name="name" value="{{ user.name }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="user_age" class="col-md-2 control-label">年龄</label>
+                    <div class="col-md-6">
+                        <input type="number" id="user_age" class="form-control" name="age" value="{{ user.age }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">性别</label>
+                    <div class="col-md-6">
+                        {% if user.sex == 1 %}
+                        <label class="radio-inline">
+                            <input type="radio" name="sex" value="1" checked> 男
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="sex" value="0"> 女
+                        </label>
+                        {% else %}
+                        <label class="radio-inline">
+                            <input type="radio" name="sex" value="1"> 男
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="sex" value="0" checked> 女
+                        </label>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="user_tel" class="col-md-2 control-label">电话</label>
+                    <div class="col-md-6">
+                        <input type="text" id="user_tel" class="form-control" name="tel" value="{{ user.tel }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6 col-md-offset-2">
+                        <button type="submit" class="btn btn-success">确定</button>
+                        <button type="reset" class="btn btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
