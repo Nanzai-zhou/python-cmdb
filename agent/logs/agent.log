@@ -1,0 +1,75 @@
+2022-02-23 15:37:04,328 agentd [INFO]: server_ip: 127.0.0.1, server_port: 8000
+2022-02-23 15:37:04,328 agentd [INFO]: create queue
+2022-02-23 15:37:04,332 consumer [INFO]: receive queue
+2022-02-23 15:37:04,336 producter [INFO]: resource: {'type': 'resource', 'ip': '172.6.0.4', 'msg': {'cpu_usage': 7.3, 'mem_usage': 83.3}}
+2022-02-23 15:37:04,336 producter [INFO]: put resource into queue
+2022-02-23 15:37:04,336 producter [INFO]: host: {'type': 'client', 'ip': '172.6.0.4', 'msg': {'hostname': 'hz-zhouhaonan', 'mac': '38:fc:98:89:be:2a', 'platform': 'Windows-10-10.0.19041-SP0', 'arch': 'AMD64', 'cpu': 16, 'mem': 13.87}}
+2022-02-23 15:37:04,336 producter [INFO]: put heartbeat into queue
+2022-02-23 15:37:04,336 producter [INFO]: put host into queue
+2022-02-23 15:37:04,348 consumer [INFO]: send resource info success. {"code": 200, "result": {}, "error": "resource created"}
+2022-02-23 15:37:04,348 consumer [INFO]: receive queue
+2022-02-23 15:37:04,356 consumer [INFO]: send heartbeat info success. {"code": 200, "result": {}, "error": "heartbeat time update"}
+2022-02-23 15:37:04,356 consumer [INFO]: receive queue
+2022-02-23 15:37:04,363 consumer [INFO]: send host info success. {"code": 200, "result": {"id": 3, "hostname": "hz-zhouhaonan", "ip": "172.6.0.4", "mac": "38:fc:98:89:be:2a", "platform": "Windows-10-10.0.19041-SP0", "arch": "AMD64", "cpu": 16, "mem": 13.87, "pid": 0, "user": "", "application": "", "position": "", "remark": "", "heartbeat_time": "2022-02-23T15:37:04.353", "register_time": "2022-02-23T15:33:40.480", "modify_time": "2022-02-23T15:37:04.360"}, "error": ""}
+2022-02-23 15:37:04,363 consumer [INFO]: receive queue
+2022-02-23 15:37:34,346 producter [INFO]: put heartbeat into queue
+2022-02-23 15:37:34,354 consumer [INFO]: send heartbeat info success. {"code": 200, "result": {}, "error": "heartbeat time update"}
+2022-02-23 15:37:34,354 consumer [INFO]: receive queue
+2022-02-23 15:38:04,343 producter [INFO]: resource: {'type': 'resource', 'ip': '192.168.31.180', 'msg': {'cpu_usage': 4.9, 'mem_usage': 82.9}}
+2022-02-23 15:38:04,343 producter [INFO]: put resource into queue
+2022-02-23 15:38:04,354 consumer [INFO]: send resource info success. {"code": 200, "result": {}, "error": "resource created"}
+2022-02-23 15:38:04,355 consumer [INFO]: receive queue
+2022-02-23 15:38:04,359 producter [INFO]: put heartbeat into queue
+2022-02-23 15:38:04,365 consumer [INFO]: send heartbeat info success. {"code": 200, "result": {}, "error": "heartbeat time update"}
+2022-02-23 15:38:04,365 consumer [INFO]: receive queue
+2022-02-23 15:38:34,362 producter [INFO]: put heartbeat into queue
+2022-02-23 15:38:34,372 consumer [INFO]: send heartbeat info success. {"code": 200, "result": {}, "error": "heartbeat time update"}
+2022-02-23 15:38:34,372 consumer [INFO]: receive queue
+2022-02-23 15:39:04,356 producter [INFO]: resource: {'type': 'resource', 'ip': '192.168.31.180', 'msg': {'cpu_usage': 4.6, 'mem_usage': 83.5}}
+2022-02-23 15:39:04,356 producter [INFO]: put resource into queue
+2022-02-23 15:39:04,367 consumer [INFO]: send resource info success. {"code": 200, "result": {}, "error": "resource created"}
+2022-02-23 15:39:04,367 consumer [INFO]: receive queue
+2022-02-23 15:39:04,371 producter [INFO]: put heartbeat into queue
+2022-02-23 15:39:04,378 consumer [INFO]: send heartbeat info success. {"code": 200, "result": {}, "error": "heartbeat time update"}
+2022-02-23 15:39:04,378 consumer [INFO]: receive queue
+2022-02-23 15:39:14,083 agentd [INFO]: server_ip: 127.0.0.1, server_port: 8000
+2022-02-23 15:39:14,083 agentd [INFO]: create queue
+2022-02-23 15:39:14,087 consumer [INFO]: receive queue
+2022-02-23 15:39:14,090 producter [INFO]: resource: {'type': 'resource', 'ip': '192.168.31.180', 'msg': {'cpu_usage': 9.3, 'mem_usage': 83.4}}
+2022-02-23 15:39:14,091 producter [INFO]: put resource into queue
+2022-02-23 15:39:14,091 producter [INFO]: host: {'type': 'client', 'ip': '192.168.31.180', 'msg': {'hostname': 'hz-zhouhaonan', 'mac': '38:fc:98:89:be:2a', 'platform': 'Windows-10-10.0.19041-SP0', 'arch': 'AMD64', 'cpu': 16, 'mem': 13.87}}
+2022-02-23 15:39:14,091 producter [INFO]: put heartbeat into queue
+2022-02-23 15:39:14,091 producter [INFO]: put host into queue
+2022-02-23 15:39:14,103 consumer [INFO]: send resource info success. {"code": 200, "result": {}, "error": "resource created"}
+2022-02-23 15:39:14,103 consumer [INFO]: receive queue
+2022-02-23 15:39:14,108 consumer [INFO]: send heartbeat info success. {"code": 200, "result": {}, "error": "heartbeat time update"}
+2022-02-23 15:39:14,108 consumer [INFO]: receive queue
+2022-02-23 15:39:14,115 consumer [INFO]: send host info success. {"code": 200, "result": {"id": 4, "hostname": "hz-zhouhaonan", "ip": "192.168.31.180", "mac": "38:fc:98:89:be:2a", "platform": "Windows-10-10.0.19041-SP0", "arch": "AMD64", "cpu": 16, "mem": 13.87, "pid": 0, "user": "", "application": "", "position": "", "remark": "", "heartbeat_time": "2022-02-23T15:39:14.112", "register_time": "2022-02-23T15:39:14.112", "modify_time": "2022-02-23T15:39:14.112"}, "error": ""}
+2022-02-23 15:39:14,115 consumer [INFO]: receive queue
+2022-02-23 15:39:44,106 producter [INFO]: put heartbeat into queue
+2022-02-23 15:39:44,117 consumer [INFO]: send heartbeat info success. {"code": 200, "result": {}, "error": "heartbeat time update"}
+2022-02-23 15:39:44,117 consumer [INFO]: receive queue
+2022-02-23 15:40:14,096 producter [INFO]: resource: {'type': 'resource', 'ip': '192.168.31.180', 'msg': {'cpu_usage': 3.4, 'mem_usage': 83.3}}
+2022-02-23 15:40:14,096 producter [INFO]: put resource into queue
+2022-02-23 15:40:14,106 consumer [INFO]: send resource info success. {"code": 200, "result": {}, "error": "resource created"}
+2022-02-23 15:40:14,106 consumer [INFO]: receive queue
+2022-02-23 15:40:14,111 producter [INFO]: put heartbeat into queue
+2022-02-23 15:40:14,119 consumer [INFO]: send heartbeat info success. {"code": 200, "result": {}, "error": "heartbeat time update"}
+2022-02-23 15:40:14,119 consumer [INFO]: receive queue
+2022-02-23 15:40:44,113 producter [INFO]: put heartbeat into queue
+2022-02-23 15:41:14,104 producter [INFO]: resource: {'type': 'resource', 'ip': '192.168.31.180', 'msg': {'cpu_usage': 6.5, 'mem_usage': 84.2}}
+2022-02-23 15:41:14,105 producter [INFO]: put resource into queue
+2022-02-23 15:41:14,119 producter [INFO]: put heartbeat into queue
+2022-02-23 15:41:44,129 producter [INFO]: put heartbeat into queue
+2022-02-23 15:42:14,115 producter [INFO]: resource: {'type': 'resource', 'ip': '192.168.31.180', 'msg': {'cpu_usage': 5.7, 'mem_usage': 81.9}}
+2022-02-23 15:42:14,116 producter [INFO]: put resource into queue
+2022-02-23 15:42:14,130 producter [INFO]: put heartbeat into queue
+2022-02-23 15:42:44,146 producter [INFO]: put heartbeat into queue
+2022-02-23 15:43:14,120 producter [INFO]: resource: {'type': 'resource', 'ip': '192.168.31.180', 'msg': {'cpu_usage': 6.6, 'mem_usage': 80.8}}
+2022-02-23 15:43:14,120 producter [INFO]: put resource into queue
+2022-02-23 15:43:14,150 producter [INFO]: put heartbeat into queue
+2022-02-23 15:43:44,155 producter [INFO]: put heartbeat into queue
+2022-02-23 15:44:14,128 producter [INFO]: resource: {'type': 'resource', 'ip': '192.168.31.180', 'msg': {'cpu_usage': 6.7, 'mem_usage': 81.7}}
+2022-02-23 15:44:14,128 producter [INFO]: put resource into queue
+2022-02-23 15:45:14,130 producter [INFO]: resource: {'type': 'resource', 'ip': '192.168.31.180', 'msg': {'cpu_usage': 4.6, 'mem_usage': 81.6}}
+2022-02-23 16:39:14,098 producter [INFO]: host: {'type': 'client', 'ip': '192.168.31.180', 'msg': {'hostname': 'hz-zhouhaonan', 'mac': '38:fc:98:89:be:2a', 'platform': 'Windows-10-10.0.19041-SP0', 'arch': 'AMD64', 'cpu': 16, 'mem': 13.87}}
